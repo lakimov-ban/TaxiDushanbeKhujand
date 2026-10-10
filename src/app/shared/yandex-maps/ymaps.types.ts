@@ -25,23 +25,6 @@ export interface YmapsMapState {
   controls?: string[];
 }
 
-export interface YmapsGeoObject {
-  readonly geometry: { getCoordinates(): LatLng } | null;
-  readonly properties: { get(path: string): unknown };
-}
-
-export interface YmapsGeoObjectCollection {
-  getLength(): number;
-  get(index: number): YmapsGeoObject;
-}
-
-export interface YmapsGeocodeOptions {
-  results?: number;
-  kind?: 'house' | 'street' | 'metro' | 'district' | 'locality';
-  boundedBy?: [LatLng, LatLng];
-  strictBounds?: boolean;
-}
-
 export interface Ymaps {
   ready(onReady: () => void, onError?: (error: unknown) => void): void;
   Map: new (
@@ -49,10 +32,6 @@ export interface Ymaps {
     state: YmapsMapState,
     options?: Record<string, unknown>,
   ) => YmapsMap;
-  geocode(
-    request: string | LatLng,
-    options?: YmapsGeocodeOptions,
-  ): PromiseLike<{ geoObjects: YmapsGeoObjectCollection }>;
 }
 
 declare global {
