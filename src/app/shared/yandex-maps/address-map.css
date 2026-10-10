@@ -1,0 +1,92 @@
+:host {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--map);
+}
+
+.canvas,
+.placeholder {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.note {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: var(--paper);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Булавка указывает остриём в центр карты. */
+.pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+  transition: transform 0.15s ease;
+  pointer-events: none;
+}
+
+.pin.lifted {
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.pin-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgb(0 0 0 / 0.2);
+}
+
+.pin-stem {
+  width: 4px;
+  height: 14px;
+  border-radius: 0 0 2px 2px;
+  background: var(--ink);
+}
+
+.tone-start {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.tone-finish {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.tone-stop {
+  background: var(--stop);
+  color: var(--ink);
+}
+
+.badge {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  max-width: calc(100% - 80px);
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+}

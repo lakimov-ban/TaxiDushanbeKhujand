@@ -1,0 +1,77 @@
+<section class="address">
+  <app-address-map
+    class="map"
+    [center]="view().center"
+    [zoom]="view().zoom"
+    [pinLetter]="pinLetter()"
+    [pinTone]="pinTone()"
+    [badge]="badge()"
+    (picked)="onMapPicked($event)"
+  />
+
+  <div class="form">
+    <h1 class="step-title" data-step-title tabindex="-1">{{ title() }}</h1>
+    @if (doneText()) {
+      <p class="done muted">{{ doneText() }}</p>
+    }
+
+    <div class="search">
+      @if (listOpen()) {
+        <ul id="addr-options" class="options" role="listbox" aria-label="Найденные адреса">
+          @for (s of suggestions(); track $index) {
+            <li
+              role="option"
+              class="option"
+              [id]="'addr-option-' + $index"
+              [class.active]="$index === activeIndex()"
+              [attr.aria-selected]="$index === activeIndex()"
+              (mousedown)="$event.preventDefault()"
+              (click)="pick(s)"
+            >
+              <span class="option-title">{{ s.title }}</span>
+              @if (s.subtitle) {
+                <span class="option-sub">{{ s.subtitle }}</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+
+      <label class="visually-hidden" for="addr-input">{{ placeholder() }}, {{ point().city }}</label>
+      <div class="field field-lg">
+        <input
+          #input
+          id="addr-input"
+          type="text"
+          role="combobox"
+          data-autofocus
+          autocomplete="off"
+          enterkeyhint="search"
+          aria-autocomplete="list"
+          [attr.aria-controls]="listOpen() ? 'addr-options' : null"
+          [attr.aria-expanded]="listOpen()"
+          [attr.aria-activedescendant]="activeOptionId()"
+          [placeholder]="placeholder()"
+          [value]="point().address"
+          (input)="onInput(input.value)"
+          (keydown)="onKeydown($event)"
+          (blur)="closeOnBlur()"
+        />
+        @if (searching()) {
+          <span class="spinner" aria-hidden="true"></span>
+        }
+      </div>
+    </div>
+
+    <p class="visually-hidden" role="status">{{ status() }}</p>
+    <p class="notice" role="status">{{ notice() }}</p>
+
+    <ul class="chips" aria-label="Популярные адреса">
+      @for (street of popularStreets; track street) {
+        <li>
+          <button type="button" class="chip" (click)="pickPopular(street)">{{ street }}</button>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

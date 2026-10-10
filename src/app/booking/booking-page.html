@@ -1,0 +1,47 @@
+<header class="topbar">
+  <button type="button" class="brand" (click)="store.reset()">
+    <span class="brand-mark" aria-hidden="true"><span></span></span>
+    Попутка
+  </button>
+  <div class="avatar" aria-hidden="true">АК</div>
+</header>
+
+<main class="content">
+  @switch (store.step()) {
+    @case ('welcome') {
+      <app-welcome-step />
+    }
+    @case ('cities') {
+      <app-cities-step />
+    }
+    @case ('address') {
+      <app-address-step />
+    }
+    @case ('date') {
+      <app-date-step />
+    }
+    @case ('passengers') {
+      <app-passengers-step />
+    }
+    @case ('cars') {
+      <app-cars-step />
+    }
+    @case ('confirm') {
+      <app-confirm-step />
+    }
+    @case ('done') {
+      <app-done-step />
+    }
+  }
+</main>
+
+@if (store.showBar()) {
+  <nav class="bottombar" aria-label="Шаги бронирования">
+    <button type="button" class="back" (click)="store.back()">← Назад</button>
+    @if (store.showNext()) {
+      <button type="button" class="btn btn-accent" [disabled]="!store.canNext()" (click)="store.next()">
+        {{ store.nextLabel() }}
+      </button>
+    }
+  </nav>
+}
