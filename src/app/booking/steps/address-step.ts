@@ -49,20 +49,19 @@ export class AddressStep {
   protected readonly index = this.store.pointIndex;
   protected readonly point = computed(() => this.store.currentPoint() ?? { city: '', address: '', coords: null });
   private readonly isFirst = computed(() => this.index() === 0);
-  private readonly isLast = computed(() => this.index() === this.store.points().length - 1);
   private readonly cityCenter = computed(() => (findCity(this.point().city) ?? CITIES[0]).center);
 
   protected readonly title = computed(() =>
-    this.isFirst() ? 'Откуда вас забрать?' : this.isLast() ? 'Куда вас отвезти?' : 'Где остановка по пути?',
+    this.isFirst() ? 'Откуда вас забрать?' : 'Куда вас отвезти?',
   );
   protected readonly placeholder = computed(() =>
-    this.isFirst() ? 'Улица и дом посадки' : this.isLast() ? 'Улица и дом высадки' : 'Улица и дом остановки',
+    this.isFirst() ? 'Улица и дом посадки' : 'Улица и дом высадки',
   );
   protected readonly doneText = computed(() =>
     this.store
       .points()
       .slice(0, this.index())
-      .map((p, i) => `${i === 0 ? 'Посадка' : 'Остановка'}: ${p.city}, ${p.address}`)
+      .map((p) => `Посадка: ${p.city}, ${p.address}`)
       .join(' · '),
   );
 
@@ -79,9 +78,7 @@ export class AddressStep {
       }),
   });
   protected readonly pinLetter = computed(() => String.fromCharCode(65 + this.index()));
-  protected readonly pinTone = computed<PinTone>(() =>
-    this.isFirst() ? 'start' : this.isLast() ? 'finish' : 'stop',
-  );
+  protected readonly pinTone = computed<PinTone>(() => (this.isFirst() ? 'start' : 'finish'));
   protected readonly badge = computed(
     () =>
       `Точка ${this.index() + 1} из ${this.store.points().length} · ${this.point().city}` +

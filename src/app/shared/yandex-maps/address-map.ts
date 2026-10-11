@@ -15,7 +15,7 @@ import {
 import { YandexMapsLoader } from './yandex-maps-loader';
 import { LatLng, YmapsMap } from './ymaps.types';
 
-export type PinTone = 'start' | 'stop' | 'finish';
+export type PinTone = 'start' | 'finish';
 
 /**
  * Яндекс Карта с булавкой по центру: булавка стоит на месте, пользователь двигает карту.

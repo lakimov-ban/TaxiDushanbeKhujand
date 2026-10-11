@@ -14,7 +14,7 @@ import { BookingStore } from '../booking.store';
         <span class="dot dot-end"></span>
       </div>
       <h1 data-step-title tabindex="-1">Межгород от двери до двери</h1>
-      <p>Заберём от дома, довезём до адреса. Эконом или комфорт, с остановками в городах по пути.</p>
+      <p>Заберём от дома, довезём до адреса. Эконом или комфорт — на ваш выбор.</p>
       <button type="button" class="btn btn-dark btn-lg" (click)="store.start()">Начать</button>
     </section>
   `,

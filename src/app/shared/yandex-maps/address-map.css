@@ -73,11 +73,6 @@
   color: var(--ink);
 }
 
-.tone-stop {
-  background: var(--stop);
-  color: var(--ink);
-}
-
 .badge {
   position: absolute;
   left: 16px;

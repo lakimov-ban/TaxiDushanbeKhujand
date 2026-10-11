@@ -24,7 +24,6 @@ export interface RoutePoint {
   coords: LatLng | null;
 }
 
-export const MAX_ROUTE_CITIES = 5;
 export const MAX_ADULTS = 6;
 export const MAX_KIDS = 4;
 const BASE_PRICE_PER_SEGMENT = 150;
@@ -39,7 +38,6 @@ export class BookingStore {
 
   readonly step = signal<BookingStep>('welcome');
   readonly route = signal<string[]>([]);
-  readonly addingVia = signal(false);
   readonly cityQuery = signal('');
   readonly points = signal<RoutePoint[]>([]);
   readonly pointIndex = signal(0);
@@ -52,7 +50,7 @@ export class BookingStore {
   readonly name = signal('');
   readonly phone = signal('');
 
-  readonly routeComplete = computed(() => this.route().length >= 2 && !this.addingVia());
+  readonly routeComplete = computed(() => this.route().length === 2);
   readonly currentPoint = computed<RoutePoint | undefined>(() => this.points()[this.pointIndex()]);
   readonly passengers = computed(() => this.adults() + this.kids());
 
@@ -107,7 +105,6 @@ export class BookingStore {
   reset(): void {
     this.step.set('welcome');
     this.route.set([]);
-    this.addingVia.set(false);
     this.cityQuery.set('');
     this.points.set([]);
     this.pointIndex.set(0);
@@ -122,18 +119,8 @@ export class BookingStore {
   }
 
   pickCity(city: string): void {
-    if (this.addingVia()) {
-      // Промежуточный город встаёт перед конечным.
-      this.route.update((r) => [...r.slice(0, -1), city, ...r.slice(-1)]);
-      this.addingVia.set(false);
-    } else {
-      this.route.update((r) => [...r, city]);
-    }
-    this.cityQuery.set('');
-  }
-
-  startVia(): void {
-    this.addingVia.set(true);
+    if (this.routeComplete()) return;
+    this.route.update((r) => [...r, city]);
     this.cityQuery.set('');
   }
 
@@ -171,8 +158,7 @@ export class BookingStore {
     if (step === 'address' && this.pointIndex() > 0) {
       this.pointIndex.update((i) => i - 1);
     } else if (step === 'cities') {
-      if (this.addingVia()) this.addingVia.set(false);
-      else if (this.route().length) this.route.update((r) => r.slice(0, -1));
+      if (this.route().length) this.route.update((r) => r.slice(0, -1));
       else this.step.set('welcome');
       this.cityQuery.set('');
     } else {

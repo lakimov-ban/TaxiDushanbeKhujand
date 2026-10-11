@@ -9,7 +9,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CITIES } from '../booking.data';
-import { BookingStore, MAX_ROUTE_CITIES } from '../booking.store';
+import { BookingStore } from '../booking.store';
 
 @Component({
   selector: 'app-cities-step',
@@ -45,13 +45,6 @@ import { BookingStore, MAX_ROUTE_CITIES } from '../booking.store';
             <li class="muted">Город не найден</li>
           }
         </ul>
-      } @else if (canAddVia()) {
-        <div class="via">
-          <p class="muted">Нужно заехать в другой город по пути?</p>
-          <button type="button" class="btn btn-soft" (click)="startVia()">
-            + Добавить город по пути
-          </button>
-        </div>
       }
     </section>
   `,
@@ -67,8 +60,6 @@ import { BookingStore, MAX_ROUTE_CITIES } from '../booking.store';
       font-size: 18px; font-weight: 600; text-align: left; cursor: pointer;
     }
     .tile:hover { background: var(--accent); }
-    .via { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-    .via p { margin: 0; font-size: 16px; }
   `,
 })
 export class CitiesStep {
@@ -79,7 +70,7 @@ export class CitiesStep {
 
   private readonly stage = computed(() => {
     const n = this.store.route().length;
-    return this.store.addingVia() ? 'via' : n === 0 ? 'from' : n === 1 ? 'to' : 'done';
+    return n === 0 ? 'from' : n === 1 ? 'to' : 'done';
   });
 
   protected readonly title = computed(
@@ -87,13 +78,11 @@ export class CitiesStep {
       ({
         from: 'Откуда едем?',
         to: 'Куда едем?',
-        via: 'Какой город по пути?',
         done: 'Маршрут',
       })[this.stage()],
   );
   protected readonly routeText = computed(() => this.store.route().join('  →  '));
   protected readonly showPicker = computed(() => this.stage() !== 'done');
-  protected readonly canAddVia = computed(() => this.store.route().length < MAX_ROUTE_CITIES);
 
   protected readonly tiles = computed(() => {
     const used = this.store.route();
@@ -103,11 +92,6 @@ export class CitiesStep {
 
   protected pick(city: string): void {
     this.store.pickCity(city);
-    this.restoreFocus();
-  }
-
-  protected startVia(): void {
-    this.store.startVia();
     this.restoreFocus();
   }
 

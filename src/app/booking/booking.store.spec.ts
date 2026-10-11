@@ -10,18 +10,14 @@ describe('BookingStore', () => {
     store.start();
   });
 
-  it('builds a route and inserts a via city before the destination', () => {
+  it('builds a route of exactly two cities', () => {
     store.pickCity('Душанбе');
     expect(store.canNext()).toBe(false);
     store.pickCity('Худжанд');
     expect(store.canNext()).toBe(true);
 
-    store.startVia();
-    expect(store.canNext()).toBe(false);
     store.pickCity('Истаравшан');
-
-    expect(store.route()).toEqual(['Душанбе', 'Истаравшан', 'Худжанд']);
-    expect(store.canNext()).toBe(true);
+    expect(store.route()).toEqual(['Душанбе', 'Худжанд']);
   });
 
   it('walks through every route point on the address step', () => {
